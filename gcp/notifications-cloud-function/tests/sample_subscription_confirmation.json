@@ -1,0 +1,12 @@
+{
+  "Type": "SubscriptionConfirmation",
+  "MessageId": "test-confirm-001",
+  "Token": "fake-token-xyz",
+  "TopicArn": "arn:aws:sns:us-east-1:909774767032:a2-group92-tag-events",
+  "Message": "You have chosen to subscribe to the topic. To confirm the subscription, visit the SubscribeURL.",
+  "SubscribeURL": "https://sns.us-east-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=arn%3Aaws%3Asns%3Aus-east-1%3A909774767032%3Aa2-group92-tag-events&Token=fake",
+  "Timestamp": "2026-06-05T10:00:00.000Z",
+  "SignatureVersion": "1",
+  "Signature": "fake-sig",
+  "SigningCertURL": "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-fake.pem"
+}

@@ -1,0 +1,76 @@
+# Operation System
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+.codex-venv/
+.env
+
+# Node
+node_modules/
+dist/
+build/
+
+# Large model files
+*.pt
+*.pth
+*.onnx
+*.h5
+
+# AWS / GCP credentials
+.aws/
+credentials.json
+*service-account*.json
+*.pem
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Mac unzip files
+__MACOSX/
+
+# Local generated files
+uploads/
+thumbnails/
+models/
+
+# Local database
+*.sqlite3
+*.db
+
+# Test/cache
+.pytest_cache/
+.coverage
+# Large ML model files
+AussieEcoLense/model.pt
+AussieEcoLense/mdv5a.pt
+.built_p2/
+.build_p2/
+.build_p2_delete/
+work/
+delete-output.json
+delete-payload.json
+
+# FastAPI mock local state
+database.sqlite3
+uploads/
+thumbnails/
+.venv/
+backend/http-facing-lambdas/function.zip
+backend/upload-url/*.zip
+gcp/notifications-cloud-function/.venv/
+backend/notifications-subscribe/*.zip
+backend/file-pipeline/*.zip
+backend/file-pipeline/*.zip

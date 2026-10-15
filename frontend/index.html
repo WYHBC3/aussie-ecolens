@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FIT5225 Wildlife Tagging MVP</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Dashboard navigation">
+        <div class="brand-block">
+          <p class="eyebrow">FIT5225 Assignment 2</p>
+          <h2>Aussie EcoLens</h2>
+          <p>Local wildlife tagging demo</p>
+        </div>
+
+        <nav class="side-nav">
+          <div class="nav-group">
+            <p>Media</p>
+            <a href="#upload-panel">Upload</a>
+            <a href="#results-panel">Media Results</a>
+          </div>
+          <div class="nav-group">
+            <p>Queries</p>
+            <a href="#query-tags-panel">Query by Species/Tags</a>
+            <a href="#query-file-panel">Query by File</a>
+            <a href="#query-thumbnail-panel">Query by Thumbnail</a>
+          </div>
+          <div class="nav-group">
+            <p>Operations</p>
+            <a href="#tag-panel">Tag Management</a>
+            <a href="#delete-panel">Delete File</a>
+          </div>
+          <div class="nav-group">
+            <p>Notifications</p>
+            <a href="#subscription-panel">Notification Subscription</a>
+          </div>
+        </nav>
+      </aside>
+
+      <div class="dashboard">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Aussie EcoLens</p>
+            <h1>A Multi-Cloud Serverless Wildlife Observation Platform</h1>
+            <p class="subtitle">Upload, query, edit, delete, and subscribe to wildlife media updates.</p>
+          </div>
+          <div class="api-pill">
+            API: <span id="apiBaseLabel">https://01bn3v0646.execute-api.us-east-1.amazonaws.com/dev</span>
+          </div>
+        </header>
+
+        <main class="layout">
+          <section class="panel auth-panel">
+            <div class="section-title">
+              <h2>Login Status</h2>
+              <p id="loginStatusText">Checking login status...</p>
+            </div>
+            <div class="auth-actions">
+              <button id="loginButton" type="button">Login with Cognito</button>
+              <button id="logoutButton" class="secondary-button" type="button">Logout</button>
+            </div>
+          </section>
+
+          <section id="upload-panel" class="panel upload-panel">
+            <div class="section-title">
+              <h2>Upload Media to Library</h2>
+              <p>Upload a new image or video to the media library. Detection and indexing run in the background.</p>
+              <p class="section-hint">For immediate species detection, use Query by File.</p>
+            </div>
+            <div class="form-row">
+              <input id="uploadFile" type="file" accept="image/*,video/*" />
+              <button id="uploadButton" type="button">Upload</button>
+            </div>
+            <div id="uploadStatusCard" class="upload-status-card">
+              <div class="status-card-header">
+                <h3>Upload Status</h3>
+                <span id="uploadStatusBadge" class="status-badge neutral">No upload yet</span>
+              </div>
+              <p id="uploadStatusMessage">No upload yet.</p>
+              <dl id="uploadStatusDetails" class="status-details"></dl>
+            </div>
+            <div id="uploadOutput" class="output empty">Upload results will appear here.</div>
+          </section>
+
+          <section id="query-tags-panel" class="panel">
+            <div class="section-title">
+              <h2>Query by Species/Tags</h2>
+              <p>Use species tags or tag counts such as <code>bos_taurus, casuarius_casuarius=1, perameles_nasuta=2</code>.</p>
+            </div>
+            <div class="form-row">
+              <input id="queryTagsInput" type="text" value="bos_taurus" />
+              <button id="searchButton" type="button">Search</button>
+            </div>
+            <div id="queryOutput" class="output empty">Search results will appear here.</div>
+          </section>
+
+          <section id="query-file-panel" class="panel">
+            <div class="section-title">
+              <h2>Query by File</h2>
+              <p>Upload a temporary query image or video to detect species and search matching records.</p>
+              <p class="section-hint">Use a small media file for query testing. Very large files may exceed API request size limits.</p>
+            </div>
+            <div class="form-row">
+              <input id="queryFileInput" type="file" accept="image/*,video/*" />
+              <button id="queryFileButton" type="button">Search by File</button>
+            </div>
+            <div id="queryFileDetectionCard" class="detection-result-card" hidden>
+              <h3>Detection Result</h3>
+              <div id="queryFileDetectedTags" class="detection-section"></div>
+              <div class="matching-summary">
+                <h4>Matching Results</h4>
+                <p id="queryFileMatchSummary"></p>
+              </div>
+            </div>
+            <div id="queryFileOutput" class="output empty">File query results will appear here.</div>
+          </section>
+
+          <section id="query-thumbnail-panel" class="panel">
+            <div class="section-title">
+              <h2>Query by Thumbnail URL</h2>
+              <p>Paste a thumbnail URL or /thumbnails/... path.</p>
+            </div>
+            <div class="form-row">
+              <input id="thumbnailQueryInput" type="text" placeholder="https://example.com/thumbnail.jpg" />
+              <button id="thumbnailQueryButton" type="button">Find Original File</button>
+            </div>
+            <div id="thumbnailQueryOutput" class="output empty">Thumbnail query results will appear here.</div>
+          </section>
+
+          <section id="results-panel" class="panel results-panel">
+            <div class="section-title">
+              <h2>Media Results</h2>
+              <p>Search and query results appear as media library cards.</p>
+            </div>
+            <div id="resultsGrid" class="results-grid"></div>
+          </section>
+
+          <section id="tag-panel" class="panel">
+            <div class="section-title">
+              <h2>Tag Management</h2>
+              <p>Add, update, or remove tags for an uploaded file URL.</p>
+            </div>
+            <div class="form-grid">
+              <label>
+                File URL
+                <input id="tagFileUrl" type="text" placeholder="/uploads/xxxx.jpg" />
+              </label>
+              <label>
+                Tag Name
+                <input id="tagName" type="text" placeholder="dingo" />
+              </label>
+              <label>
+                Count
+                <input id="tagCount" type="number" min="1" value="1" />
+              </label>
+              <label>
+                Operation
+                <select id="tagOperation">
+                  <option value="1">Add or Update</option>
+                  <option value="0">Remove</option>
+                </select>
+              </label>
+            </div>
+            <button id="editTagsButton" type="button">Apply Tag Change</button>
+            <div id="tagEditOutput" class="output empty">Tag edit results will appear here.</div>
+          </section>
+
+          <section id="delete-panel" class="panel">
+            <div class="section-title">
+              <h2>Delete File</h2>
+              <p>Delete one or more files by URLs or file IDs.</p>
+            </div>
+            <div class="form-grid delete-grid">
+              <label>
+                Delete Mode
+                <select id="deleteMode">
+                  <option value="urls">URLs</option>
+                  <option value="file_ids">File IDs</option>
+                </select>
+              </label>
+              <label>
+                Values
+                <textarea
+                  id="deleteFileUrl"
+                  rows="4"
+                  placeholder="/uploads/xxxx.jpg&#10;/uploads/yyyy.jpg"
+                ></textarea>
+              </label>
+            </div>
+            <button id="deleteButton" type="button">Delete Selected</button>
+            <div id="deleteOutput" class="output empty">Delete results will appear here.</div>
+          </section>
+
+          <section id="subscription-panel" class="panel">
+            <div class="section-title">
+              <h2>Notification Subscription</h2>
+              <p>Subscribe to email notifications when new media matches selected tags.</p>
+            </div>
+            <div class="form-row">
+              <input id="subscriptionEmail" type="email" placeholder="user@example.com" />
+              <input id="subscriptionTags" type="text" placeholder="bos_taurus,casuarius_casuarius" />
+              <button id="subscribeButton" type="button">Subscribe</button>
+            </div>
+            <div id="subscriptionOutput" class="output empty">Subscription results will appear here.</div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <template id="resultCardTemplate">
+      <article class="result-card">
+        <div class="thumbnail-button" title="Media preview">
+          <img alt="Wildlife thumbnail preview" />
+        </div>
+        <div class="result-body">
+          <h3>Media Result</h3>
+          <div class="detection-section" data-field="detectedTags"></div>
+          <div class="media-summary">
+            <p><strong>File Type:</strong> <span data-field="fileType"></span></p>
+            <p><strong>MIME Type:</strong> <span data-field="mimeType"></span></p>
+            <p data-field="frameCountRow" hidden><strong>Frame Count:</strong> <span data-field="frameCount"></span></p>
+          </div>
+          <div class="result-actions" data-field="actions"></div>
+          <details class="result-technical-details">
+            <summary>Technical Details</summary>
+            <dl data-field="technicalDetails"></dl>
+            <pre data-field="rawItemJson"></pre>
+          </details>
+          <p class="full-url" data-field="fullUrl"></p>
+        </div>
+      </article>
+    </template>
+
+    <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cognito Login Callback</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="layout narrow-layout">
+      <section class="panel">
+        <div class="section-title">
+          <h1>Cognito Login Callback</h1>
+          <p id="callbackStatus">Completing login...</p>
+        </div>
+        <div id="callbackOutput" class="output empty">Waiting for Cognito token exchange.</div>
+      </section>
+    </main>
+
+    <script src="auth.js"></script>
+    <script>
+      const callbackStatus = document.getElementById("callbackStatus");
+      const callbackOutput = document.getElementById("callbackOutput");
+
+      function showCallbackMessage(message, isError = false) {
+        callbackOutput.classList.remove("empty", "success", "error");
+        callbackOutput.classList.add(isError ? "error" : "success");
+        callbackOutput.textContent = message;
+      }
+
+      Auth.handleCognitoCallback()
+        .then(() => {
+          callbackStatus.textContent = "Login completed successfully.";
+          showCallbackMessage("Tokens were stored locally. Redirecting to the app...");
+          window.setTimeout(() => {
+            window.location.href = "index.html";
+          }, 900);
+        })
+        .catch((error) => {
+          callbackStatus.textContent = "Login failed.";
+          showCallbackMessage(error.message, true);
+        });
+    </script>
+  </body>
+</html>

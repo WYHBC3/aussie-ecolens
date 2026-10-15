@@ -1,0 +1,42 @@
+# P2 File Pipeline - Aussie EcoLens
+
+## Overview
+
+This document describes the P2 file handling pipeline for the Aussie EcoLens project.
+
+P2 is responsible for handling files uploaded to Amazon S3. The pipeline supports:
+
+- S3 upload event handling
+- SHA256 checksum-based deduplication
+- Automatic deletion of duplicate uploads
+- Image thumbnail generation
+- Video frame extraction
+- Metadata storage in DynamoDB
+- P3 tagging handoff payload preparation
+
+The current implementation has been tested in an AWS Academy account and is prepared for deployment into the shared integration AWS account.
+
+---
+
+## AWS Services Used
+
+The P2 pipeline uses the following AWS services:
+
+- Amazon S3
+- AWS Lambda
+- Amazon DynamoDB
+- Amazon CloudWatch Logs
+- AWS IAM
+- Lambda Layers
+
+---
+
+## S3 Bucket Structure
+
+The S3 bucket contains the following prefixes:
+
+```text
+uploads/
+thumbnails/
+video-frames/
+temp-query/

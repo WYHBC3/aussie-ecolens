@@ -1,0 +1,6 @@
+boto3
+pillow
+numpy
+torch
+torchvision
+onnx2torch

@@ -1,0 +1,12 @@
+{
+  "Type": "Notification",
+  "MessageId": "test-msg-001",
+  "TopicArn": "arn:aws:sns:us-east-1:909774767032:a2-group92-tag-events",
+  "Subject": "New tag event",
+  "Message": "{\"file_id\":\"ee3693c36f1d8c48e385c47f62df59a001d6a010e434924d689f2f6231c6e24\",\"file_url\":\"https://a2-group92-p2-media-909774767032.s3.amazonaws.com/uploads/9aee8101-bcb8-4789-a708-5d874e9ecfd5.jpg\",\"tags\":[\"bos_taurus\"]}",
+  "Timestamp": "2026-06-05T10:00:00.000Z",
+  "SignatureVersion": "1",
+  "Signature": "fake-signature-for-local-test",
+  "SigningCertURL": "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-fake.pem",
+  "UnsubscribeURL": "https://sns.us-east-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=fake"
+}
